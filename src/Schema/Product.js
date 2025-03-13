@@ -69,6 +69,10 @@ const productSchema = new mongoose.Schema({
             'Apparel & Lifestyle'
         ]
     },
+    discount:{
+        type:Number,
+    }
+    , 
     category: {
         type: String,
         required: true,

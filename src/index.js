@@ -1,25 +1,21 @@
-const express=require('express');
-// const bodyparser=require('body-parser');
+const express = require("express");
+const ServerConfig = require("./config/serverconfig");
+const connectdb = require("./config/dbConfig");
 
-const ServerConfig=require('./config/serverconfig');
-const connectdb=require("./config/dbConfig");
+const app = express();
 
-const app=express();
-
-const Productrouter=require("./Routes/ProductRoute");
+const Productrouter = require("./Routes/ProductRoute");
+const Userrouter = require("./Routes/UserRoute");
 
 
-// app.use(bodyparser.json());   //json body acceptable
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/v1/Product", Productrouter);
+app.use("/v1/User", Userrouter);
 
 
-app.use("/Product",Productrouter);
-
-
-app.listen(ServerConfig.PORT,async ()=>{
-     
-      await connectdb();
-      console.log(`server started at PORT ${ServerConfig.PORT}..`);
-      // console.log(ServerConfig.PORT);
-})
+app.listen(ServerConfig.PORT, async () => {
+    await connectdb();
+    console.log(`✅ Server started at PORT ${ServerConfig.PORT}`);
+});

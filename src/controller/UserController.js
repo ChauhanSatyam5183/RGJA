@@ -4,12 +4,13 @@ const{loggging}=require("../Service/Login");
 async function usercreate(req,res) {
     const Userdetail=req.body;
     console.log("usercontroller");
-    console.log(Userdetail);
+    console.log("userdetail",Userdetail);
     try {
         const user=await createuser(Userdetail);
         return res.status(201).json({ 
-            success: true, 
-            data: user 
+            success: user.sucess, 
+            data: user.data,
+            message:user.message 
         });
 
     } catch (error) {
@@ -32,9 +33,9 @@ async function login(req,res) {
         
         console.log("userlogin",user);
         return res.status(201).json({
-            success:true,
-            message:"Login successfullly",
-            ID:user
+            success:user.sucess,
+            message:user.messsge,
+            data:user.data
         })
     } catch (error) {
         return res.status(error.statusCode || 500).json({ 

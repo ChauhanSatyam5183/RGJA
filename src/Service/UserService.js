@@ -1,25 +1,29 @@
-const {create}=require("../Repository/UserRepository");
-
-const User=require("../Schema/User");
+const {create,Find,userFindById}=require("../Repository/UserRepository");
 
 async function createuser(Userdetail) {
     
     const email=Userdetail.email;
     const phone=Userdetail.phone;
  
-    console.log("userservice");
-      const existingUser = await User.findOne({email:email,phone:phone});
+    console.log("userservice ",email," ",phone);
+    const existingUser = await Find({email:email,phone:phone});
       
      console.log("existinguser",existingUser);
+     
      if (existingUser) {
-        throw { message: "User already exists", error: "Please login with different credentials" };
+        return { message: "User already exists with these credentials",data:{},sucess:false};
                 }
 
           // Use `await` with `create` since it returns a promise
-      const newUser = await create(Userdetail);
-         return newUser;
+     
+      var newUser = await create(Userdetail);
+      return { message: "User created",data:newUser,sucess:true};
  
        
 };
+async function FindBYID(Id) {
+  
+   return userFindById(ID);
+}
 
-module.exports={createuser}; 
+module.exports={createuser,FindBYID}; 

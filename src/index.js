@@ -7,6 +7,7 @@ const app = express();
 
 const Productrouter = require("./Routes/ProductRoute");
 const Userrouter = require("./Routes/UserRoute");
+const Cartrouter=require("./Routes/CartRoutes");
 
 app.use(cors({
     origin: "https://rgja-frontend-93qp.vercel.app", // Frontend URL
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/v1/Product", Productrouter);
 app.use("/v1/User", Userrouter);
-
+app.use("/v1/cart",Cartrouter);
 
 app.listen(ServerConfig.PORT, async () => {
     await connectdb();

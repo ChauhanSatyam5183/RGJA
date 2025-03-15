@@ -10,7 +10,7 @@ const Userrouter = require("./Routes/UserRoute");
 const Cartrouter=require("./Routes/CartRoutes");
 
 app.use(cors({
-    origin: "https://rgja-frontend-93qp.vercel.app", // Frontend URL
+  origin: ["https://rgja-frontend-93qp.vercel.app", "http://localhost:5500"],// Frontend URL
     methods: "GET,POST,PUT,DELETE",
     credentials: true // Allow cookies if needed
   }));

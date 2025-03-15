@@ -1,14 +1,15 @@
 const{Find}=require("../Repository/UserRepository");
+const User=require("../Schema/User");
 
 async function loggging(loggingdetail) {
     
     const email=loggingdetail.email;
 
-    const password=loggingdetail.password;
+    const password=loggingdetail.password;  
     console.log("logginginfo",email,password);
-    const user=await Find(email);
+    const user=await User.findOne({email:email});
     
-    // console.log("user",user._id);
+    console.log("user",user);
     if(user){
         if(password===user.password){
             return{messsge:"Loggined succesfully",sucess:true,data:user._id};

@@ -1,6 +1,6 @@
 const cartRepository = require("../Repository/CartRepository");
 const Product = require("../Schema/Product");
-const Cart = require("../Schema/Cart"); // Ensure Cart schema is imported
+const Cart = require("../Schema/Cart");
 
 /** ✅ Add or Update Cart */
 async function addToCart(userId, productId, quantity) {
@@ -15,9 +15,9 @@ async function addToCart(userId, productId, quantity) {
     }
 
     let item = cart.items.find(item => item.product.toString() === productId);
-
+ 
     if (item) {
-        if (item.quantity + quantity > product.stock) {
+        if (product.stock < item.quantity + quantity) {
             return { success: false, message: "Exceeds available stock" };
         }
         item.quantity += quantity;
@@ -47,9 +47,12 @@ async function getCart(userId) {
 
 /** ✅ Remove Item from Cart & Restore Stock */
 async function removeItem(userId, productId) {
+    console.log("cart service remove");
+    
     let cart = await cartRepository.findCartByUser(userId);
     if (!cart) return { success: false, message: "Cart not found" };
 
+    // Find item in cart
     const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
     if (itemIndex === -1) return { success: false, message: "Item not found in cart" };
 
@@ -60,15 +63,23 @@ async function removeItem(userId, productId) {
     if (product) {
         product.stock += removedItem.quantity;
         await product.save();
+    } else {
+        console.warn("Product not found in database. Skipping stock update.");
     }
 
-    // Remove item from cart
+    // Remove item from cart 
     cart.items.splice(itemIndex, 1);
+    
+    // Recalculate totals
     cart.totalItems = cart.items.length;
-    cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price, 0);
+    cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price, 0); // Recalculate total price
+
+    // If cart is empty after removal, reset total price
+    if (cart.items.length === 0) {
+        cart.totalPrice = 0;
+    }
 
     await cartRepository.saveCart(cart);
     return { success: true, message: "Item removed from cart", cart };
 }
-
 module.exports = { addToCart, getCart, removeItem };

@@ -17,7 +17,7 @@ async function create(userdetail) {
 };
 
 async function Find(params) {
-  const{email,phone}=params;
+   
     try{
         const existingUser = await User.findOne({email:email,phone:phone});
 

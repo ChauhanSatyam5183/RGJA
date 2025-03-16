@@ -8,12 +8,15 @@ async function addToCart(req, res) {
 
 async function getCart(req, res) {
     const { userId } = req.params;
-    if(userId.length==24){
-    const response = await cartService.getCart(userId);
-    res.json(response);}
 
-    res.json({sucess:false,message:"Signup again something went wrong"});
-} 
+    if (userId.length === 24) {
+        const response = await cartService.getCart(userId);
+        return res.json(response);  // ✅ Ensures only one response is sent
+    }
+
+    res.json({ success: false, message: "Signup again something went wrong" });
+}
+
 
 async function removeItem(req, res) {
     console.log("cart controller remove");

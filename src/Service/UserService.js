@@ -6,7 +6,7 @@ async function createuser(Userdetail) {
     const phone=Userdetail.phone;
  
     console.log("userservice ",email," ",phone);
-    const existingUser = await Find({email:email,phone:phone});
+    const existingUser = await Find(Userdetail);
       
      console.log("existinguser",existingUser);
      
